@@ -22,17 +22,16 @@ func triangulate(cells:Array[HexCell]):
 	arrays[Mesh.ARRAY_NORMAL] = normals
 	arrays[Mesh.ARRAY_COLOR] = colors
 	
-	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, arrays)
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	collision_shape.shape = mesh.create_trimesh_shape()
 	
 func triangulate_cell(cell:HexCell):
 	var center:Vector3 = cell.position
 	for i in range(6):
-		add_triangle(center, center + HexMetrics.CORNERS[i], center + HexMetrics.CORNERS[i+1])
+		add_triangle(center, center + HexMetrics.CORNERS[i+1], center + HexMetrics.CORNERS[i])
 		add_triangle_color(cell.color)
 	
 func add_triangle(v1:Vector3, v2:Vector3, v3:Vector3):
-	var vertIndex:int = vertices.size()
 	vertices.append(v1)
 	vertices.append(v2)
 	vertices.append(v3)
