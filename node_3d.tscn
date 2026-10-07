@@ -2,9 +2,20 @@
 
 [ext_resource type="PackedScene" uid="uid://diclan2d12k85" path="res://hex_grid.tscn" id="1_a202f"]
 
+[sub_resource type="Environment" id="Environment_noarx"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_a0tk4"]
+
 [node name="Node3D" type="Node3D" unique_id=1700162155]
 
 [node name="HexGrid" parent="." unique_id=1881075025 instance=ExtResource("1_a202f")]
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=277513699]
 transform = Transform3D(1, 0, 0, 0, 0.829613, 0.5583389, 0, -0.5583389, 0.829613, 44.632187, 41.946346, 101.66684)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=168193839]
+transform = Transform3D(1, 0, 0, 0, -0.6516616, 0.7585098, 0, -0.7585098, -0.6516616, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1618823404]
+environment = SubResource("Environment_noarx")
+camera_attributes = SubResource("CameraAttributesPractical_a0tk4")

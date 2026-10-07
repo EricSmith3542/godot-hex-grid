@@ -1,11 +1,9 @@
 [gd_scene format=3 uid="uid://diclan2d12k85"]
 
 [ext_resource type="Script" uid="uid://bichh5t52boby" path="res://hex_grid.gd" id="1_kpu3p"]
-[ext_resource type="Script" uid="uid://bunl3lyudx3c6" path="res://hex_mesh.gd" id="2_esttd"]
+[ext_resource type="PackedScene" uid="uid://6tee3jl2u56" path="res://hex_mesh.tscn" id="2_esttd"]
 
 [node name="HexGrid" type="Node3D" unique_id=1881075025]
 script = ExtResource("1_kpu3p")
 
-[node name="HexMesh" type="Node3D" parent="." unique_id=215384466]
-script = ExtResource("2_esttd")
-metadata/_custom_type_script = "uid://bunl3lyudx3c6"
+[node name="HexMesh" parent="." unique_id=170552868 instance=ExtResource("2_esttd")]
