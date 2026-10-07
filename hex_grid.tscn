@@ -7,3 +7,5 @@
 script = ExtResource("1_kpu3p")
 
 [node name="HexMesh" parent="." unique_id=170552868 instance=ExtResource("2_esttd")]
+
+[connection signal="cell_clicked" from="HexMesh" to="." method="_on_hex_mesh_cell_clicked"]

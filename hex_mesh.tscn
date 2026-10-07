@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://bunl3lyudx3c6" path="res://hex_mesh.gd" id="1_3vvb2"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3vvb2"]
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+disable_receive_shadows = true
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_3vvb2"]
 
@@ -10,3 +13,10 @@
 material_override = SubResource("StandardMaterial3D_3vvb2")
 mesh = SubResource("ArrayMesh_3vvb2")
 script = ExtResource("1_3vvb2")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1093870782]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1216741353]
+
+[connection signal="input_event" from="StaticBody3D" to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="StaticBody3D" to="." method="_on_mouse_entered"]

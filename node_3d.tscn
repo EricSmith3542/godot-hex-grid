@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://by6woqxj7vuyw"]
 
 [ext_resource type="PackedScene" uid="uid://diclan2d12k85" path="res://hex_grid.tscn" id="1_a202f"]
+[ext_resource type="Script" uid="uid://b72b3t0garuiy" path="res://debug_camera.gd" id="2_noarx"]
 
 [sub_resource type="Environment" id="Environment_noarx"]
 
@@ -10,11 +11,14 @@
 
 [node name="HexGrid" parent="." unique_id=1881075025 instance=ExtResource("1_a202f")]
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=277513699]
+[node name="DebugCamera" type="Camera3D" parent="." unique_id=929282788]
 transform = Transform3D(1, 0, 0, 0, 0.829613, 0.5583389, 0, -0.5583389, 0.829613, 44.632187, 41.946346, 101.66684)
+script = ExtResource("2_noarx")
+metadata/_custom_type_script = "uid://b72b3t0garuiy"
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=168193839]
 transform = Transform3D(1, 0, 0, 0, -0.6516616, 0.7585098, 0, -0.7585098, -0.6516616, 0, 0, 0)
+shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1618823404]
 environment = SubResource("Environment_noarx")
