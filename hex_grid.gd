@@ -31,10 +31,12 @@ func build_cell(x:int, z:int):
 	cells.append(cell)
 	add_child(cell)
 	
-func _on_hex_mesh_cell_clicked(coordinates: HexCoordinates) -> void:
+
+
+func _on_hex_grid_editor_cell_clicked(coordinates: HexCoordinates, color: Color) -> void:
 	var cell_index = coordinates.X + coordinates.Z * width + coordinates.Z / 2
 	var cell = cells[cell_index]
-	cell.color = touched_cell_color
+	cell.color = color
 	
 #	Ugly for now but tutorial addresses that this will change in later steps as the mesh becomes more advanced
 	mesh.triangulate(cells)

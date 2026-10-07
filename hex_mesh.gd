@@ -1,7 +1,7 @@
 class_name HexMesh
 extends MeshInstance3D
 
-signal cell_clicked(coordinates:HexCoordinates)
+#signal cell_clicked(coordinates:HexCoordinates)
 
 var vertices : PackedVector3Array
 var normals : PackedVector3Array
@@ -42,16 +42,13 @@ func add_triangle(v1:Vector3, v2:Vector3, v3:Vector3):
 func add_triangle_color(color:Color):
 	for i in range(3):
 		colors.append(color)
-	
-func _on_mouse_entered() -> void:
-	print("hovering at " + str(get_viewport().get_mouse_position()))
 
-
-func _on_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			var intersection_point = (camera as DebugCamera).get_position_collision_point(event.position)
-			var coordinates = HexCoordinates.from_position(intersection_point)
-			cell_clicked.emit(coordinates)
-			print("clicked coordinate " + str(HexCoordinates.from_position(intersection_point)))
+#
+#func _on_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
+	#if event is InputEventMouseButton:
+		#if event.button_index == MOUSE_BUTTON_LEFT:
+			#var intersection_point = (camera as DebugCamera).get_position_collision_point(event.position)
+			#var coordinates = HexCoordinates.from_position(intersection_point)
+			#cell_clicked.emit(coordinates)
+			#print("clicked coordinate " + str(HexCoordinates.from_position(intersection_point)))
 			

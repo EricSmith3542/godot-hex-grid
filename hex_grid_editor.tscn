@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://v7ils7xipqkt"]
+
+[ext_resource type="Script" uid="uid://ob3xluqqqlny" path="res://hex_grid_editor.gd" id="1_cds6q"]
+
+[node name="HexGridEditor" type="Node3D" unique_id=242709990]
+script = ExtResource("1_cds6q")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1426791008]
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="CanvasLayer" unique_id=1839446341]
+offset_right = 8.0
+offset_bottom = 8.0
+
+[connection signal="color_changed" from="CanvasLayer/ColorPickerButton" to="." method="_on_color_changed"]
