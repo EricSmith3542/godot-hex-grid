@@ -1,6 +1,8 @@
 #This class stores metrics about the hexagons that populate the hex grid. These metrics can be used to control the size and shape of the hexagon tiles
 class_name HexMetrics
 
+enum HexDirection {NE, E, SE, SW, W, NW}
+
 #The radius of the circle that contains that vertices of the hexagon
 const OUTER_RADIUS : float = 10.0
 #The radius of the circle that contains the center of each edge
@@ -18,3 +20,8 @@ const CORNERS = [
 	Vector3(-INNER_RADIUS, 0.0, 0.5 * OUTER_RADIUS),
 	Vector3(0.0, 0.0, OUTER_RADIUS),
 ]
+
+static func opposite_direction(direction:HexDirection) -> HexDirection:
+	if int(direction) < 3:
+		return (int(direction) + 3) as HexDirection
+	return (int(direction) - 3) as HexDirection
