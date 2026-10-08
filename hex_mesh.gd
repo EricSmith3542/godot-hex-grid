@@ -28,6 +28,8 @@ func triangulate_cell(cell:HexCell):
 		triangulate_cell_in_direction(d, cell)
 
 func triangulate_cell_in_direction(direction:HexMetrics.HexDirection, cell:HexCell):
+	
+	#Add a inner-triangle for the current cell in the given direction
 	var center:Vector3 = cell.position
 	var v1 = center + HexMetrics.first_solid_corner(direction)
 	var v2 = center + HexMetrics.second_solid_corner(direction)
@@ -35,26 +37,37 @@ func triangulate_cell_in_direction(direction:HexMetrics.HexDirection, cell:HexCe
 	add_triangle(center, v1, v2)
 	add_triangle_color(cell.color)
 	
+	if direction <= HexMetrics.HexDirection.SE:
+		triangulate_connection(direction, cell, v1, v2)
+	
+	##Fill in the triangle gaps
+	#add_triangle(v1, center + HexMetrics.first_corner(direction), v3)
+	#add_triangle_colors(cell.color, (cell.color + prev_neighbor.color + neighbor.color)/ 3.0, bridgeColor)
+	#add_triangle(v2, v4, center + HexMetrics.second_corner(direction))
+	#add_triangle_colors(cell.color, bridgeColor, (cell.color + next_neighbor.color + neighbor.color)/ 3.0)
+	
+func triangulate_connection(direction:HexMetrics.HexDirection, cell:HexCell, v1:Vector3, v2:Vector3):
+	var neighbor = cell.get_neighbor(direction)
+	if !neighbor:
+		return
+		
+	#Add quad that bridges the above triangle to the neighbor cell in the direction
 	var bridge = HexMetrics.get_bridge(direction)
 	var v3 = v1 + bridge
 	var v4 = v2 + bridge
 	
 	add_quad(v1,v2,v3,v4)
+	add_quad_colors(cell.color,cell.color,neighbor.color,neighbor.color)
 	
 #	TODO: Find a better null-coalescing approach for gdscript
-	var prev_neighbor = cell.get_neighbor(HexMetrics.previous_direction(direction))
-	var neighbor = cell.get_neighbor(direction)
 	var next_neighbor = cell.get_neighbor(HexMetrics.next_direction(direction))
-	prev_neighbor = prev_neighbor if prev_neighbor else cell
-	neighbor = neighbor if neighbor else cell
-	next_neighbor = next_neighbor if next_neighbor else cell
+	if direction <= HexMetrics.HexDirection.E and next_neighbor:
+		add_triangle(v2,v4,v2 + HexMetrics.get_bridge(HexMetrics.next_direction(direction)))
+		add_triangle_colors(cell.color, neighbor.color, next_neighbor.color)
 	
-	add_quad_colors(
-		cell.color,
-		cell.color,
-		(cell.color + neighbor.color) * 0.5,
-		(cell.color + neighbor.color) * 0.5,
-	)
+	
+	
+	
 	
 func add_triangle(v1:Vector3, v2:Vector3, v3:Vector3):
 	var vertexIndex = vertices.size()
@@ -71,9 +84,9 @@ func add_triangle_color(color:Color):
 	colors.append(color)
 	
 func add_triangle_colors(c1:Color,c2:Color,c3:Color):
-	colors.append(c1)
-	colors.append(c2)
 	colors.append(c3)
+	colors.append(c2)
+	colors.append(c1)
 	
 func add_quad(v1:Vector3, v2:Vector3, v3:Vector3, v4:Vector3):
 	var vertexIndex = vertices.size()

@@ -12,7 +12,7 @@
 [node name="HexGrid" parent="." unique_id=1881075025 instance=ExtResource("1_a202f")]
 
 [node name="DebugCamera" type="Camera3D" parent="." unique_id=929282788]
-transform = Transform3D(1, 0, 0, 0, 0.829613, 0.5583389, 0, -0.5583389, 0.829613, 44.632187, 41.946346, 101.66684)
+transform = Transform3D(-1, -2.5182775e-08, -1.0558821e-07, -1.0201855e-07, 0.5503496, 0.83493435, 3.708446e-08, 0.83493435, -0.5503496, 47.698074, 46.5174, -15.826576)
 script = ExtResource("2_noarx")
 metadata/_custom_type_script = "uid://b72b3t0garuiy"
 

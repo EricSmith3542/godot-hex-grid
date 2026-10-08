@@ -13,6 +13,8 @@ const HEX_CELL_SCENE = preload("res://hex_cell.tscn")
 var cells : Array[HexCell] = []
 
 func _ready() -> void:
+	#get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
+	
 	var i = 0
 	for z in range(height):
 		for x in range(width):
