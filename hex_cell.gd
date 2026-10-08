@@ -12,7 +12,7 @@ func _init() -> void:
 func set_coordinate_label_text(text:String):
 	$CoordinateLabel.text = text
 	
-func get_neighbor(direction:HexMetrics.HexDirection):
+func get_neighbor(direction:HexMetrics.HexDirection) -> HexCell:
 	return neighbors[int(direction)]
 	
 func set_neighbor(direction:HexMetrics.HexDirection, cell:HexCell):
