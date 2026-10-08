@@ -47,4 +47,4 @@ static func second_solid_corner(direction:HexDirection) -> Vector3:
 	return CORNERS[int(direction)+1] * SOLID_FACTOR
 	
 static func get_bridge(direction:HexDirection) -> Vector3:
-	return CORNERS[int(direction)] + CORNERS[int(direction) + 1] * 0.5 * BLEND_FACTOR
+	return (CORNERS[int(direction)] + CORNERS[int(direction) + 1]) * 0.5 * BLEND_FACTOR

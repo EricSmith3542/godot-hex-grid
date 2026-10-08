@@ -35,15 +35,12 @@ func triangulate_cell_in_direction(direction:HexMetrics.HexDirection, cell:HexCe
 	add_triangle(center, v1, v2)
 	add_triangle_color(cell.color)
 	
-	var v3 = center + HexMetrics.first_corner(direction)
-	var v4 = center + HexMetrics.second_corner(direction)
+	var bridge = HexMetrics.get_bridge(direction)
+	var v3 = v1 + bridge
+	var v4 = v2 + bridge
 	
-	#var bridge = HexMetrics.get_bridge(direction)
-	#var v3 = v1 + bridge
-	#var v4 = v2 + bridge
-	#
 	add_quad(v1,v2,v3,v4)
-	#
+	
 #	TODO: Find a better null-coalescing approach for gdscript
 	var prev_neighbor = cell.get_neighbor(HexMetrics.previous_direction(direction))
 	var neighbor = cell.get_neighbor(direction)
@@ -55,8 +52,8 @@ func triangulate_cell_in_direction(direction:HexMetrics.HexDirection, cell:HexCe
 	add_quad_colors(
 		cell.color,
 		cell.color,
-		(cell.color + prev_neighbor.color + neighbor.color) / 3.0,
-		(cell.color + next_neighbor.color + neighbor.color) / 3.0,
+		(cell.color + neighbor.color) * 0.5,
+		(cell.color + neighbor.color) * 0.5,
 	)
 	
 func add_triangle(v1:Vector3, v2:Vector3, v3:Vector3):
