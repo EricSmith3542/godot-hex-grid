@@ -32,7 +32,7 @@ func triangulate_cell_in_direction(direction:HexMetrics.HexDirection, cell:HexCe
 	var v1 = center + HexMetrics.first_solid_corner(direction)
 	var v2 = center + HexMetrics.second_solid_corner(direction)
 	
-	add_triangle(center, v2, v1)
+	add_triangle(center, v1, v2)
 	add_triangle_color(cell.color)
 	
 	var v3 = center + HexMetrics.first_corner(direction)
@@ -61,9 +61,9 @@ func triangulate_cell_in_direction(direction:HexMetrics.HexDirection, cell:HexCe
 	
 func add_triangle(v1:Vector3, v2:Vector3, v3:Vector3):
 	var vertexIndex = vertices.size()
-	vertices.append(v1)
-	vertices.append(v2)
 	vertices.append(v3)
+	vertices.append(v2)
+	vertices.append(v1)
 	normals.append(Vector3.UP)
 	normals.append(Vector3.UP)
 	normals.append(Vector3.UP)

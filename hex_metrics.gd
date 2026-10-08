@@ -35,8 +35,7 @@ static func next_direction(direction:HexDirection) -> HexDirection:
 static func previous_direction(direction:HexDirection) -> HexDirection:
 	return HexDirection.NW if direction == HexDirection.NE else (direction - 1) as HexDirection
 
-#Since Unity uses a different widing order than Godot, this differs from tutorials implementation
-#The "first_corner" is actually our second corner, but I'll keep names as is for now for the ease of following the tutorial	
+
 static func first_corner(direction:HexDirection) -> Vector3:
 	return CORNERS[int(direction)]
 static func second_corner(direction:HexDirection) -> Vector3:
