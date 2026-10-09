@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bunl3lyudx3c6" path="res://hex_mesh.gd" id="1_3vvb2"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3vvb2"]
+shading_mode = 2
 vertex_color_use_as_albedo = true
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_3vvb2"]

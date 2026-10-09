@@ -10,5 +10,3 @@ script = ExtResource("1_kpu3p")
 [node name="HexMesh" parent="." unique_id=170552868 instance=ExtResource("2_esttd")]
 
 [node name="HexGridEditor" parent="." unique_id=242709990 instance=ExtResource("3_ube50")]
-
-[connection signal="cell_clicked" from="HexGridEditor" to="." method="_on_hex_grid_editor_cell_clicked"]

@@ -7,8 +7,29 @@ script = ExtResource("1_cds6q")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1426791008]
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="CanvasLayer" unique_id=1839446341]
-offset_right = 8.0
-offset_bottom = 8.0
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer" unique_id=460223289]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 150.0
+grow_vertical = 2
 
-[connection signal="color_changed" from="CanvasLayer/ColorPickerButton" to="." method="_on_color_changed"]
+[node name="VFlowContainer" type="VFlowContainer" parent="CanvasLayer/MarginContainer" unique_id=275120083]
+layout_mode = 2
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="CanvasLayer/MarginContainer/VFlowContainer" unique_id=1839446341]
+layout_mode = 2
+text = "Pick Color"
+color = Color(1, 1, 1, 1)
+
+[node name="HSplitContainer" type="HSplitContainer" parent="CanvasLayer/MarginContainer/VFlowContainer" unique_id=84460509]
+layout_mode = 2
+
+[node name="ElevationLabel" type="Label" parent="CanvasLayer/MarginContainer/VFlowContainer/HSplitContainer" unique_id=1718522324]
+layout_mode = 2
+text = "Elevation: "
+
+[node name="ElevationNumber" type="Label" parent="CanvasLayer/MarginContainer/VFlowContainer/HSplitContainer" unique_id=872936426]
+layout_mode = 2
+text = "0"
+
+[connection signal="color_changed" from="CanvasLayer/MarginContainer/VFlowContainer/ColorPickerButton" to="." method="_on_color_changed"]

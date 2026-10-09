@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bv6mopk1secxa"]
+
+[ext_resource type="Script" uid="uid://bqs6ajfokhvfn" path="res://game_quitter.gd" id="1_r0iqy"]
+
+[node name="GameQuitter" type="Node3D" unique_id=673382808]
+script = ExtResource("1_r0iqy")

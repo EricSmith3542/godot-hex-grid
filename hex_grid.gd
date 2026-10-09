@@ -9,11 +9,12 @@ extends Node3D
 const HEX_CELL_SCENE = preload("res://hex_cell.tscn")
 
 @onready var mesh:HexMesh = $HexMesh
+@onready var editor:HexGridEditor = $HexGridEditor
 
 var cells : Array[HexCell] = []
 
 func _ready() -> void:
-	#get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
+	get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
 	
 	var i = 0
 	for z in range(height):
@@ -25,6 +26,8 @@ func _ready() -> void:
 
 func build_cell(x:int, z:int, i:int):
 	var cell:HexCell = HEX_CELL_SCENE.instantiate()
+
+	@warning_ignore("integer_division")
 	cell.position.x = (x + z * 0.5 - z / 2) * HexMetrics.INNER_RADIUS * 2
 	cell.position.z = z * HexMetrics.OUTER_RADIUS * 1.5
 	cell.coordinates = HexCoordinates.from_offset_coordinates(x,z)
@@ -50,10 +53,10 @@ func connect_neighbors(x:int, z:int, i:int, cell:HexCell):
 				cell.set_neighbor(HexMetrics.HexDirection.SE, cells[i - width + 1])
 
 
-func _on_hex_grid_editor_cell_clicked(coordinates: HexCoordinates, color: Color) -> void:
+func get_cell(coordinates: HexCoordinates) -> HexCell:
+	@warning_ignore("integer_division")
 	var cell_index = coordinates.X + coordinates.Z * width + coordinates.Z / 2
-	var cell = cells[cell_index]
-	cell.color = color
+	return cells[cell_index]
 	
-#	Ugly for now but tutorial addresses that this will change in later steps as the mesh becomes more advanced
+func refresh():
 	mesh.triangulate(cells)

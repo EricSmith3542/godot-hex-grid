@@ -10,6 +10,7 @@ func _init(x:int, z:int) -> void:
 	Y = -X - Z
 	
 static func from_offset_coordinates(x:int, z:int) -> HexCoordinates:
+	@warning_ignore("integer_division")
 	return new(x-z/2,z)
 	
 static func from_position(pos:Vector3) -> HexCoordinates:
