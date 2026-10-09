@@ -2,8 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://diclan2d12k85" path="res://hex_grid.tscn" id="1_a202f"]
 [ext_resource type="Script" uid="uid://b72b3t0garuiy" path="res://debug_camera.gd" id="2_noarx"]
+[ext_resource type="PackedScene" uid="uid://bnoaacswo7013" path="res://guide_spheres.tscn" id="3_a0tk4"]
 
 [sub_resource type="Environment" id="Environment_noarx"]
+background_mode = 1
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_a0tk4"]
 
@@ -19,9 +21,12 @@ metadata/_custom_type_script = "uid://b72b3t0garuiy"
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=168193839]
 transform = Transform3D(1, 0, 0, 0, -0.6659076, 0.7460342, 0, -0.7460342, -0.6659076, 0, 0, 0)
 shadow_enabled = true
-directional_shadow_max_distance = 1000.0
+directional_shadow_max_distance = 3113.8
 sky_mode = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1618823404]
 environment = SubResource("Environment_noarx")
 camera_attributes = SubResource("CameraAttributesPractical_a0tk4")
+
+[node name="GuideSpheres" parent="." unique_id=1713534070 instance=ExtResource("3_a0tk4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.412999, 0)

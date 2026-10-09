@@ -65,7 +65,6 @@ func triangulate_connection(direction:HexMetrics.HexDirection, cell:HexCell, v1:
 		add_quad(v1,v2,v3,v4)
 		add_quad_colors(cell.color, cell.color, neighbor.color, neighbor.color)
 	
-#	TODO: Find a better null-coalescing approach for gdscript
 	var next_neighbor = cell.get_neighbor(HexMetrics.next_direction(direction))
 	if direction <= HexMetrics.HexDirection.E and next_neighbor:
 		var v5 = v2 + HexMetrics.get_bridge(HexMetrics.next_direction(direction))

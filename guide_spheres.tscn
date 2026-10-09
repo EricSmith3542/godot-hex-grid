@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bnoaacswo7013"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_etyqp"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_d26ew"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yodro"]
+albedo_color = Color(0.011087579, 0.011087578, 0.01108758, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ca8xb"]
+metallic = 1.0
+metallic_specular = 1.0
+roughness = 0.0
+
+[node name="GuideSpheres" type="Node3D" unique_id=1713534070]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=58005034]
+material_override = SubResource("StandardMaterial3D_etyqp")
+mesh = SubResource("SphereMesh_d26ew")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1827900164]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2096026, 0)
+material_override = SubResource("StandardMaterial3D_yodro")
+mesh = SubResource("SphereMesh_d26ew")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=263596556]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4185157, 0)
+material_override = SubResource("StandardMaterial3D_ca8xb")
+mesh = SubResource("SphereMesh_d26ew")

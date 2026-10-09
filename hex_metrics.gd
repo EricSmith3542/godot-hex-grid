@@ -12,7 +12,7 @@ const INNER_RADIUS : float =  OUTER_RADIUS * 0.866025404 #Outer radius * sqrt(3)
 const SOLID_FACTOR : float = 0.75
 const BLEND_FACTOR : float = 1.0 - SOLID_FACTOR
 
-const ELEVATION_STEP : float = 1.0
+const ELEVATION_STEP : float = 3.0
 const TERRACES_PER_SLOPE : int = 2
 const TERRACES_STEPS = TERRACES_PER_SLOPE * 2 + 1
 const HORIZ_TERRACE_STEP_SIZE : float = 1.0 / TERRACES_STEPS
@@ -74,6 +74,6 @@ static func get_edge_type(elevation1:int, elevation2:int) -> HexEdgeType:
 	if elevation1 == elevation2:
 		return HexEdgeType.Flat
 	var delta = elevation2 - elevation1
-	if delta == 1 or delta == -1:
+	if delta == HexMetrics.ELEVATION_STEP or delta == -HexMetrics.ELEVATION_STEP:
 		return HexEdgeType.Slope
 	return HexEdgeType.Cliff
