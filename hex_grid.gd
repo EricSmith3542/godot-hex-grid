@@ -15,7 +15,9 @@ var cells : Array[HexCell] = []
 
 func _ready() -> void:
 	# get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
-	
+
+	var noiseSource = Image.load_from_file("noise.png")
+	HexMetrics.noiseSource = noiseSource
 	var i = 0
 	for z in range(height):
 		for x in range(width):

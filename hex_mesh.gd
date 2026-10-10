@@ -223,9 +223,9 @@ func triangulate_boundary_triangle(
 		add_triangle_colors(c2, leftCell.color, boundaryColor)
 
 func add_triangle(v1:Vector3, v2:Vector3, v3:Vector3):
-	vertices.append(v3)
-	vertices.append(v2)
-	vertices.append(v1)
+	vertices.append(perturb(v3))
+	vertices.append(perturb(v2))
+	vertices.append(perturb(v1))
 	normals.append(Vector3.UP)
 	normals.append(Vector3.UP)
 	normals.append(Vector3.UP)
@@ -241,12 +241,12 @@ func add_triangle_colors(c1:Color,c2:Color,c3:Color):
 	colors.append(c1)
 	
 func add_quad(v1:Vector3, v2:Vector3, v3:Vector3, v4:Vector3):
-	vertices.append(v1)
-	vertices.append(v2)
-	vertices.append(v3)
-	vertices.append(v3)
-	vertices.append(v2)
-	vertices.append(v4)
+	vertices.append(perturb(v1))
+	vertices.append(perturb(v2))
+	vertices.append(perturb(v3))
+	vertices.append(perturb(v3))
+	vertices.append(perturb(v2))
+	vertices.append(perturb(v4))
 	normals.append(Vector3.UP)
 	normals.append(Vector3.UP)
 	normals.append(Vector3.UP)
@@ -262,3 +262,9 @@ func add_quad_colors(c1:Color,c2:Color,c3:Color,c4:Color):
 	colors.append(c2)
 	colors.append(c4)
 			
+func perturb(pos:Vector3):
+	var sample:Color = HexMetrics.sample_noise(pos)
+	pos.x += (sample.r * 2.0 - 1.0) * HexMetrics.CELL_PERTURB_STRENGTH
+	# pos.y += (sample.g * 2.0 - 1.0) * HexMetrics.CELL_PERTURB_STRENGTH
+	pos.z += (sample.b * 2.0 - 1.0) * HexMetrics.CELL_PERTURB_STRENGTH
+	return pos

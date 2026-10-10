@@ -12,11 +12,13 @@ const INNER_RADIUS : float =  OUTER_RADIUS * 0.866025404 #Outer radius * sqrt(3)
 const SOLID_FACTOR : float = 0.75
 const BLEND_FACTOR : float = 1.0 - SOLID_FACTOR
 
-const ELEVATION_STEP : float = 3.0
+const ELEVATION_STEP : float = 1.0
 const TERRACES_PER_SLOPE : int = 2
 const TERRACES_STEPS = TERRACES_PER_SLOPE * 2 + 1
 const HORIZ_TERRACE_STEP_SIZE : float = 1.0 / TERRACES_STEPS
 const VERT_TERRACE_STEP_SIZE : float = 1.0 / (TERRACES_PER_SLOPE+1)
+
+const CELL_PERTURB_STRENGTH : float = 10.0
 
 #The 3D coordinates of the 6 vertices for a hexagon centered on 0,0,0
 #These corners use the XZ-plane as the floor
@@ -30,6 +32,15 @@ const CORNERS = [
 	Vector3(-INNER_RADIUS, 0.0, 0.5 * OUTER_RADIUS),
 	Vector3(0.0, 0.0, OUTER_RADIUS),
 ]
+
+const NOISE_SCALE : float = 0.05
+static var noiseSource:Image
+
+static func sample_noise(sample_position:Vector3) -> Color:
+	if noiseSource:
+		return noiseSource.get_pixel(abs(sample_position.x * NOISE_SCALE), abs(sample_position.z * NOISE_SCALE))
+	else:
+		return Color.BLACK
 
 static func opposite_direction(direction:HexDirection) -> HexDirection:
 	if int(direction) < 3:

@@ -4,8 +4,16 @@
 [ext_resource type="Script" uid="uid://b72b3t0garuiy" path="res://debug_camera.gd" id="2_noarx"]
 [ext_resource type="PackedScene" uid="uid://bnoaacswo7013" path="res://guide_spheres.tscn" id="3_a0tk4"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a0tk4"]
+
+[sub_resource type="Sky" id="Sky_r3fl7"]
+sky_material = SubResource("ProceduralSkyMaterial_a0tk4")
+
 [sub_resource type="Environment" id="Environment_noarx"]
 background_mode = 1
+sky = SubResource("Sky_r3fl7")
+ambient_light_source = 3
+reflected_light_source = 2
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_a0tk4"]
 
