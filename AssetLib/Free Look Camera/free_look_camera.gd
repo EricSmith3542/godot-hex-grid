@@ -1,7 +1,6 @@
-class_name DebugCamera
+#Copyright © 2022 Marc Nahr: https://github.com/MarcPhi/godot-free-look-camera
 extends Camera3D
 
-### FREE LOOK CAMERA ###
 @export_range(0, 10, 0.01) var sensitivity : float = 3
 @export_range(0, 1000, 0.1) var default_velocity : float = 5
 @export_range(0, 10, 0.01) var speed_scale : float = 1.17
@@ -44,22 +43,3 @@ func _process(delta):
 		translate(direction * _velocity * delta * boost_speed_multiplier)
 	else:
 		translate(direction * _velocity * delta)
-### END FREE LOOK CAMERA ###
-		
-		
-@export var ray_length = 1000.0
-
-func get_position_collision_point(pos:Vector2) -> Variant:
-	var ray_origin = project_ray_origin(pos)
-	var ray_end = ray_origin + project_ray_normal(pos) * ray_length
-	
-	var space_state = get_world_3d().direct_space_state
-	var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
-	
-	#SET COLLISION MASK HERE TO FILTER FOR ONLY CERTAIN OBJECTS
-	#query.collision_mask = 1
-	
-	var result = space_state.intersect_ray(query)
-	if result:
-		return result["position"]
-	return null	

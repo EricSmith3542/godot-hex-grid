@@ -1,4 +1,4 @@
-#This class stores metrics about the hexagons that populate the hex grid. These metrics can be used to control the size and shape of the hexagon tiles
+#This class stores metrics about the hexagons that populate the hex grid
 class_name HexMetrics
 
 enum HexDirection {NE, E, SE, SW, W, NW}
@@ -9,16 +9,17 @@ const OUTER_RADIUS : float = 10.0
 #The radius of the circle that contains the center of each edge
 const INNER_RADIUS : float =  OUTER_RADIUS * 0.866025404 #Outer radius * sqrt(3)/2 = inner radius
 
-const SOLID_FACTOR : float = 0.75
+const SOLID_FACTOR : float = 0.8
 const BLEND_FACTOR : float = 1.0 - SOLID_FACTOR
 
-const ELEVATION_STEP : float = 1.0
+const ELEVATION_STEP : float = 2.0
 const TERRACES_PER_SLOPE : int = 2
 const TERRACES_STEPS = TERRACES_PER_SLOPE * 2 + 1
 const HORIZ_TERRACE_STEP_SIZE : float = 1.0 / TERRACES_STEPS
 const VERT_TERRACE_STEP_SIZE : float = 1.0 / (TERRACES_PER_SLOPE+1)
 
-const CELL_PERTURB_STRENGTH : float = 10.0
+const CELL_PERTURB_STRENGTH : float = 4.0
+const CELL_ELEVATION_PERTURB_STRENGTH : float = 1.5
 
 #The 3D coordinates of the 6 vertices for a hexagon centered on 0,0,0
 #These corners use the XZ-plane as the floor
@@ -36,11 +37,12 @@ const CORNERS = [
 const NOISE_SCALE : float = 0.05
 static var noiseSource:Image
 
-static func sample_noise(sample_position:Vector3) -> Color:
+static func sample_noise(sample_position:Vector3) -> Vector4:
 	if noiseSource:
-		return noiseSource.get_pixel(abs(sample_position.x * NOISE_SCALE), abs(sample_position.z * NOISE_SCALE))
+		var sample_color = noiseSource.get_pixel(abs(sample_position.x * NOISE_SCALE), abs(sample_position.z * NOISE_SCALE))
+		return Vector4(sample_color.r,sample_color.g,sample_color.b,sample_color.a)
 	else:
-		return Color.BLACK
+		return Vector4.ZERO
 
 static func opposite_direction(direction:HexDirection) -> HexDirection:
 	if int(direction) < 3:

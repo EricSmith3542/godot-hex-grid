@@ -35,6 +35,7 @@ func build_cell(x:int, z:int, i:int):
 	cell.coordinates = HexCoordinates.from_offset_coordinates(x,z)
 	cell.color = default_cell_color
 	cell.set_coordinate_label_text(cell.coordinates.to_string_lines())
+	cell.elevation = 0
 	
 	connect_neighbors(x,z,i,cell)
 	

@@ -7,6 +7,7 @@ var elevation:int:
 	set(new_value):
 		elevation = new_value
 		position.y = elevation * HexMetrics.ELEVATION_STEP 
+		position.y += (HexMetrics.sample_noise(position).y * 2.0 - 1.0) * HexMetrics.CELL_ELEVATION_PERTURB_STRENGTH
 
 var neighbors:Array[HexCell]
 

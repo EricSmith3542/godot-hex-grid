@@ -34,12 +34,12 @@ func triangulate_cell_in_direction(direction:HexMetrics.HexDirection, cell:HexCe
 	var center:Vector3 = cell.position
 	var v1 = center + HexMetrics.first_solid_corner(direction)
 	var v2 = center + HexMetrics.second_solid_corner(direction)
-	
-	add_triangle(center, v1, v2)
-	add_triangle_color(cell.color)
+	var edge = EdgeVertices.new(v1, v2)
+
+	triangulate_edge_fan(center, edge, cell.color)
 	
 	if direction <= HexMetrics.HexDirection.SE:
-		triangulate_connection(direction, cell, v1, v2)
+		triangulate_connection(direction, cell, edge)
 	
 	##Fill in the triangle gaps
 	#add_triangle(v1, center + HexMetrics.first_corner(direction), v3)
@@ -47,61 +47,64 @@ func triangulate_cell_in_direction(direction:HexMetrics.HexDirection, cell:HexCe
 	#add_triangle(v2, v4, center + HexMetrics.second_corner(direction))
 	#add_triangle_colors(cell.color, bridgeColor, (cell.color + next_neighbor.color + neighbor.color)/ 3.0)
 	
-func triangulate_connection(direction:HexMetrics.HexDirection, cell:HexCell, v1:Vector3, v2:Vector3):
+func triangulate_connection(direction:HexMetrics.HexDirection, cell:HexCell, e1:EdgeVertices):
 	var neighbor = cell.get_neighbor(direction)
 	if !neighbor:
 		return
 		
 	#Add quad that bridges the above triangle to the neighbor cell in the direction
 	var bridge = HexMetrics.get_bridge(direction)
-	var v3 = v1 + bridge
-	var v4 = v2 + bridge
-	v3.y = neighbor.elevation * HexMetrics.ELEVATION_STEP
-	v4.y = neighbor.elevation * HexMetrics.ELEVATION_STEP
-	
+	bridge.y = neighbor.position.y - cell.position.y
+	var e2 = EdgeVertices.new(e1.v1 + bridge, e1.v4 + bridge)
+
 	if cell.get_edge_type_in_direction(direction) == HexMetrics.HexEdgeType.Slope:
-		triangulate_edge_terraces(v1, v2, cell, v3, v4, neighbor)
+		triangulate_edge_terraces(e1, cell, e2, neighbor)
 	else:
-		add_quad(v1,v2,v3,v4)
-		add_quad_colors(cell.color, cell.color, neighbor.color, neighbor.color)
+		triangulate_edge_strip(e1, cell.color, e2, neighbor.color)
 	
 	var next_neighbor = cell.get_neighbor(HexMetrics.next_direction(direction))
 	if direction <= HexMetrics.HexDirection.E and next_neighbor:
-		var v5 = v2 + HexMetrics.get_bridge(HexMetrics.next_direction(direction))
-		v5.y = next_neighbor.elevation * HexMetrics.ELEVATION_STEP
+		var v5 = e1.v4 + HexMetrics.get_bridge(HexMetrics.next_direction(direction))
+		v5.y = next_neighbor.position.y
 
 		if cell.elevation <= neighbor.elevation:
 			if cell.elevation <= next_neighbor.elevation:
-				triangulate_corner(v2, cell, v4, neighbor, v5, next_neighbor)
+				triangulate_corner(e1.v4, cell, e2.v4, neighbor, v5, next_neighbor)
 			else:
-				triangulate_corner(v5, next_neighbor, v2, cell, v4, neighbor)
+				triangulate_corner(v5, next_neighbor, e1.v4, cell, e2.v4, neighbor)
 		elif neighbor.elevation <= next_neighbor.elevation:
-			triangulate_corner(v4, neighbor, v5, next_neighbor, v2, cell)
+			triangulate_corner(e2.v4, neighbor, v5, next_neighbor, e1.v4, cell)
 		else:
-			triangulate_corner(v5, next_neighbor, v2, cell, v4, neighbor)
-		add_triangle(v2,v4,v5)
-		add_triangle_colors(cell.color, neighbor.color, next_neighbor.color)
+			triangulate_corner(v5, next_neighbor, e1.v4, cell, e2.v4, neighbor)
 	
-func triangulate_edge_terraces(beginLeft, beginRight, beginCell, endLeft, endRight, endCell):
-	var v3 = HexMetrics.terrace_lerp(beginLeft, endLeft, 1)
-	var v4 = HexMetrics.terrace_lerp(beginRight, endRight, 1)
+func triangulate_edge_fan(center:Vector3, edge:EdgeVertices, color:Color):
+	add_triangle(center, edge.v1, edge.v2)
+	add_triangle_color(color)
+	add_triangle(center, edge.v2, edge.v3)
+	add_triangle_color(color)
+	add_triangle(center, edge.v3, edge.v4)
+	add_triangle_color(color)
+
+func triangulate_edge_strip(e1:EdgeVertices, c1:Color, e2:EdgeVertices, c2:Color):
+	add_quad(e1.v1,e1.v2,e2.v1,e2.v2)
+	add_quad_colors(c1,c1,c2,c2)
+	add_quad(e1.v2, e1.v3, e2.v2, e2.v3)
+	add_quad_colors(c1,c1,c2,c2)
+	add_quad(e1.v3, e1.v4, e2.v3, e2.v4)
+	add_quad_colors(c1,c1,c2,c2)
+
+func triangulate_edge_terraces(begin:EdgeVertices, beginCell:HexCell, end:EdgeVertices, endCell:HexCell):
+	var e2 = EdgeVertices.terrace_lerp(begin, end, 1)
 	var c2 = HexMetrics.terrace_color_lerp(beginCell.color, endCell.color, 1)
 
-	add_quad(beginLeft, beginRight, v3, v4)
-	add_quad_colors(beginCell.color ,beginCell.color, c2, c2)
-
+	triangulate_edge_strip(begin, beginCell.color, e2, c2)
 	for i in range(2, HexMetrics.TERRACES_STEPS, 1):
-		var v1 = v3
-		var v2 = v4
+		var e1 = e2
 		var c1 = c2
-		v3 = HexMetrics.terrace_lerp(beginLeft, endLeft, i)
-		v4 = HexMetrics.terrace_lerp(beginRight, endRight, i)
+		e2 = EdgeVertices.terrace_lerp(begin, end, i)
 		c2 = HexMetrics.terrace_color_lerp(beginCell.color, endCell.color, i)
-		add_quad(v1,v2,v3,v4)
-		add_quad_colors(c1,c1,c2,c2)
-
-	add_quad(v3, v4, endLeft, endRight)
-	add_quad_colors(c2, c2, endCell.color, endCell.color)
+		triangulate_edge_strip(e1,c1,e2,c2)
+	triangulate_edge_strip(e2,c2,end,endCell.color)
 
 func triangulate_corner(
 	bottom:Vector3, bottomCell:HexCell, 
@@ -169,7 +172,7 @@ func triangulate_corner_terraces_cliff(
 		var b = 1.0 / (rightCell.elevation - beginCell.elevation)
 		if b < 0:
 			b = -b
-		var boundary = lerp(begin, right, b)
+		var boundary = lerp(perturb(begin), perturb(right), b)
 		var boundaryColor = lerp(beginCell.color, rightCell.color, b)
 
 		triangulate_boundary_triangle(begin, beginCell, left, leftCell, boundary, boundaryColor)
@@ -177,7 +180,7 @@ func triangulate_corner_terraces_cliff(
 		if leftCell.get_edge_type_with_cell(rightCell) == HexMetrics.HexEdgeType.Slope:
 			triangulate_boundary_triangle(left, leftCell, right, rightCell, boundary, boundaryColor)
 		else:
-			add_triangle(left, right, boundary)
+			add_triangle_unperturbed(perturb(left), perturb(right), boundary)
 			add_triangle_colors(leftCell.color, rightCell.color, boundaryColor)
 
 func triangulate_corner_cliff_terraces(
@@ -188,7 +191,7 @@ func triangulate_corner_cliff_terraces(
 		var b = 1.0 / (leftCell.elevation - beginCell.elevation)
 		if b < 0:
 			b = -b
-		var boundary = lerp(begin, left, b)
+		var boundary = lerp(perturb(begin), perturb(left), b)
 		var boundaryColor = lerp(beginCell.color, leftCell.color, b)
 
 		triangulate_boundary_triangle(right, rightCell, begin, beginCell, boundary, boundaryColor)
@@ -196,7 +199,7 @@ func triangulate_corner_cliff_terraces(
 		if leftCell.get_edge_type_with_cell(rightCell) == HexMetrics.HexEdgeType.Slope:
 			triangulate_boundary_triangle(left, leftCell, right, rightCell, boundary, boundaryColor)
 		else:
-			add_triangle(left, right, boundary)
+			add_triangle_unperturbed(perturb(left), perturb(right), boundary)
 			add_triangle_colors(leftCell.color, rightCell.color, boundaryColor)
 
 
@@ -205,27 +208,35 @@ func triangulate_boundary_triangle(
 	left:Vector3, leftCell:HexCell, 
 	boundary:Vector3, boundaryColor:Color
 ):
-		var v2 = HexMetrics.terrace_lerp(begin, left, 1)
+		var v2 = perturb(HexMetrics.terrace_lerp(begin, left, 1))
 		var c2 = HexMetrics.terrace_color_lerp(beginCell.color, leftCell.color, 1)
 
-		add_triangle(begin, v2, boundary)
+		add_triangle_unperturbed(perturb(begin), v2, boundary)
 		add_triangle_colors(beginCell.color, c2, boundaryColor)
 
 		for i in range(2, HexMetrics.TERRACES_STEPS, 1):
 			var v1 = v2
 			var c1 = c2
-			v2 = HexMetrics.terrace_lerp(begin, left, i)
+			v2 = perturb(HexMetrics.terrace_lerp(begin, left, i))
 			c2 = HexMetrics.terrace_color_lerp(beginCell.color, leftCell.color, i)
-			add_triangle(v1, v2, boundary)
+			add_triangle_unperturbed(v1, v2, boundary)
 			add_triangle_colors(c1, c2, boundaryColor)
 
-		add_triangle(v2, left, boundary)
+		add_triangle_unperturbed(v2, perturb(left), boundary)
 		add_triangle_colors(c2, leftCell.color, boundaryColor)
 
 func add_triangle(v1:Vector3, v2:Vector3, v3:Vector3):
 	vertices.append(perturb(v3))
 	vertices.append(perturb(v2))
 	vertices.append(perturb(v1))
+	normals.append(Vector3.UP)
+	normals.append(Vector3.UP)
+	normals.append(Vector3.UP)
+
+func add_triangle_unperturbed(v1:Vector3, v2:Vector3, v3:Vector3):
+	vertices.append(v3)
+	vertices.append(v2)
+	vertices.append(v1)
 	normals.append(Vector3.UP)
 	normals.append(Vector3.UP)
 	normals.append(Vector3.UP)
@@ -263,8 +274,8 @@ func add_quad_colors(c1:Color,c2:Color,c3:Color,c4:Color):
 	colors.append(c4)
 			
 func perturb(pos:Vector3):
-	var sample:Color = HexMetrics.sample_noise(pos)
-	pos.x += (sample.r * 2.0 - 1.0) * HexMetrics.CELL_PERTURB_STRENGTH
-	# pos.y += (sample.g * 2.0 - 1.0) * HexMetrics.CELL_PERTURB_STRENGTH
-	pos.z += (sample.b * 2.0 - 1.0) * HexMetrics.CELL_PERTURB_STRENGTH
+	var sample:Vector4 = HexMetrics.sample_noise(pos)
+	pos.x += (sample.x * 2.0 - 1.0) * HexMetrics.CELL_PERTURB_STRENGTH
+	# pos.y += (sample.y * 2.0 - 1.0) * HexMetrics.CELL_PERTURB_STRENGTH
+	pos.z += (sample.z * 2.0 - 1.0) * HexMetrics.CELL_PERTURB_STRENGTH
 	return pos
